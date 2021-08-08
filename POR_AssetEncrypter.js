@@ -35,36 +35,37 @@
  * Then feel free to do it or send me a message. 
  */
 
+
 function encryptFile(fileContents) {
     for (var i = 499; i > 99; i--) fileContents[i] += fileContents[i-5];
 };
 
-if (Utils.isOptionValid("test")) {
+function findBottomLevelFolder(filepath, search, ignore){
     var fs = require("fs");
-    var audiodir = fs.readdirSync("./audio/");
-    for (var i in audiodir) {
-        audiodir[i] += "/";
-        var musdir = fs.readdirSync("./audio/" + audiodir[i]);
-        for (var j in musdir) {
-            if (!(musdir[j].contains(".m4a") || musdir[j].contains(".ogg")) || (musdir[j].contains(".oggo") || musdir[j].contains(".m4ao"))) continue;
-            var file = fs.readFileSync("./audio/" + audiodir[i] + musdir[j]);
-            encryptFile(file);
-            fs.writeFileSync("./audio/" + audiodir[i] + musdir[j] + "o", file);
+    var files = fs.readdirSync(filepath);
+    for (var i in files) {
+        var path = filepath + files[i];
+        try {
+            findBottomLevelFolder(path + "/", search, ignore);
+        }catch(e){
+            var containsIgnore = false;
+            var rightFormat = false;
+            for (var j in search) if (path.contains(search[j])) rightFormat = true;
+            for (var j in ignore) if (path.contains(ignore[j])) containsIgnore = true;
+            if (!containsIgnore) {
+                if (rightFormat) {
+                    var file = fs.readFileSync(path);
+                    encryptFile(file);
+                    fs.writeFileSync(path + "o", file);
+                }
+            }
         }
     }
-};
+}
+
 
 if (Utils.isOptionValid("test")) {
     var fs = require("fs");
-    var imgdir = fs.readdirSync("./img/");
-    for (var i in imgdir) {
-        imgdir[i] += "/";
-        var picdir = fs.readdirSync("./img/" + imgdir[i]);
-        for (var j in picdir) {
-            if (!picdir[j].contains(".png") || picdir[j].contains(".pngo")) continue;
-            var file = fs.readFileSync("./img/" + imgdir[i] + picdir[j]);
-            encryptFile(file);
-            fs.writeFileSync("./img/" + imgdir[i] + picdir[j] + "o", file);
-        }
-    }
+    findBottomLevelFolder("./audio/", [".m4a", ".ogg"], [".oggo", "m4ao"]);
+    findBottomLevelFolder("./img", [".png"], [".pngo"]);
 };
