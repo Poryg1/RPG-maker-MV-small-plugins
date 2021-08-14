@@ -67,5 +67,5 @@ function findBottomLevelFolder(filepath, search, ignore){
 if (Utils.isOptionValid("test")) {
     var fs = require("fs");
     findBottomLevelFolder("./audio/", [".m4a", ".ogg"], [".oggo", "m4ao"]);
-    findBottomLevelFolder("./img", [".png"], [".pngo"]);
+    findBottomLevelFolder("./img/", [".png"], [".pngo"]);
 };
