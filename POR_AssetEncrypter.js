@@ -35,29 +35,34 @@
  * Then feel free to do it or send me a message. 
  */
 
+var POR_fbx = POR_fbx || 100;
+var POR_lbx = POR_lbx || 500;
+var POR_fby = POR_fbx - 1;
+var POR_lby = POR_lbx - 1;
 
 function encryptFile(fileContents) {
-    for (var i = 499; i > 99; i--) fileContents[i] += fileContents[i-5];
+    for (var i = POR_lby; i > POR_fby; i--) {
+        var x = fileContents[i];
+        fileContents[i] = fileContents[i-POR_fbx];
+        fileContents[i-POR_fbx] = x;
+        fileContents[i] += fileContents[i-5];
+    }
 };
 
-function findBottomLevelFolder(filepath, search, ignore){
+function findBottomLevelFolder(filepath, search){
     var fs = require("fs");
     var files = fs.readdirSync(filepath);
     for (var i in files) {
         var path = filepath + files[i];
         try {
-            findBottomLevelFolder(path + "/", search, ignore);
+            findBottomLevelFolder(path + "/", search);
         }catch(e){
-            var containsIgnore = false;
             var rightFormat = false;
             for (var j in search) if (path.contains(search[j])) rightFormat = true;
-            for (var j in ignore) if (path.contains(ignore[j])) containsIgnore = true;
-            if (!containsIgnore) {
-                if (rightFormat) {
-                    var file = fs.readFileSync(path);
-                    encryptFile(file);
-                    fs.writeFileSync(path + "o", file);
-                }
+            if (rightFormat) {
+                var file = fs.readFileSync(path);
+                encryptFile(file);
+                fs.writeFileSync(path + "o", file);
             }
         }
     }
@@ -65,7 +70,6 @@ function findBottomLevelFolder(filepath, search, ignore){
 
 
 if (Utils.isOptionValid("test")) {
-    var fs = require("fs");
-    findBottomLevelFolder("./audio/", [".m4a", ".ogg"], [".oggo", "m4ao"]);
-    findBottomLevelFolder("./img/", [".png"], [".pngo"]);
+    findBottomLevelFolder("./audio/", [".m4a", ".ogg"]);
+    findBottomLevelFolder("./img/", [".png"]);
 };

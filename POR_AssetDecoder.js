@@ -6,8 +6,15 @@
  * @author Poryg
  */
 
+var POR_fbx = 100;
+var POR_lbx = 500;
 function decodeFile(fileContents) {
-    for (var i = 100; i < 500; i++) fileContents[i] -= fileContents[i-5];
+    for (var i = POR_fbx; i < POR_lbx; i++) {
+        fileContents[i] -= fileContents[i-5];
+        var x = fileContents[i];
+        fileContents[i] = fileContents[i-POR_fbx];
+        fileContents[i-POR_fbx] = x;
+    }
 }
 
 POR_DatabaseCompresor_AudioManager_load = WebAudio.prototype._load;
