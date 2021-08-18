@@ -6,8 +6,8 @@
  * @author Poryg
  */
 
-var POR_fbx = 100;
-var POR_lbx = 500;
+var POR_fbx = POR_fbx || 100;
+var POR_lbx = POR_lbx || 500;
 function decodeFile(fileContents) {
     for (var i = POR_fbx; i < POR_lbx; i++) {
         fileContents[i] -= fileContents[i-5];
