@@ -35,16 +35,16 @@
  * Then feel free to do it or send me a message. 
  */
 
-var POR_fbx = POR_fbx || 100;
-var POR_lbx = POR_lbx || 500;
-var POR_fby = POR_fbx - 1;
-var POR_lby = POR_lbx - 1;
 
 function encryptFile(fileContents) {
-    for (var i = POR_lby; i > POR_fby; i--) {
+    var fbx = fbx || 100;
+    var lbx = lbx || 500;
+    var fby = fbx - 1;
+    var lby = lbx - 1;
+    for (var i = lby; i > fby; i--) {
         var x = fileContents[i];
-        fileContents[i] = fileContents[i-POR_fbx];
-        fileContents[i-POR_fbx] = x;
+        fileContents[i] = fileContents[i-fbx];
+        fileContents[i-fbx] = x;
         fileContents[i] += fileContents[i-5];
     }
 };

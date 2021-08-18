@@ -6,14 +6,14 @@
  * @author Poryg
  */
 
-var POR_fbx = POR_fbx || 100;
-var POR_lbx = POR_lbx || 500;
 function decodeFile(fileContents) {
-    for (var i = POR_fbx; i < POR_lbx; i++) {
+    var fbx = 100;
+    var lbx = 500;
+    for (var i = fbx; i < lbx; i++) {
         fileContents[i] -= fileContents[i-5];
         var x = fileContents[i];
-        fileContents[i] = fileContents[i-POR_fbx];
-        fileContents[i-POR_fbx] = x;
+        fileContents[i] = fileContents[i-fbx];
+        fileContents[i-fbx] = x;
     }
 }
 
