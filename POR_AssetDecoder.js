@@ -69,3 +69,43 @@ WebAudio.prototype._onXhrLoad = function(xhr) {
         this._onLoad();
     }.bind(this));
 };
+
+
+
+Game_Interpreter.prototype.videoFileExt = function() {
+    if (Graphics.canPlayVideoType('video/webm') && !Utils.isMobileDevice()) {
+        return '.webmo';
+    } else {
+        return '.mp4o';
+    }
+};
+
+Graphics._returnVideoFormat = function() {
+    if (Graphics.canPlayVideoType('video/webm') && !Utils.isMobileDevice()) {
+        return 'video/webm';
+    } else {
+        return 'video/mp4';
+    }
+}
+
+Graphics._playVideo = function(src) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", src);
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+    xhr.onload = Graphics._onXhrLoad.bind(this, xhr);
+    this._videoLoading = true;
+};
+
+Graphics._onXhrLoad = function(xhr) {
+    var u8arr = new Uint8Array(xhr.response);
+    decodeFile(u8arr);
+    var blob = new Blob([u8arr], {type: Graphics._returnVideoFormat()});
+    var url = URL.createObjectURL(blob);
+    this._video.src = url;
+    this._video.onloadeddata = this._onVideoLoad.bind(this);
+    this._video.onerror = this._videoLoader;
+    this._video.onended = this._onVideoEnd.bind(this);
+    this._video.load();
+}
+

@@ -72,4 +72,5 @@ function findBottomLevelFolder(filepath, search){
 if (Utils.isOptionValid("test")) {
     findBottomLevelFolder("./audio/", [".m4a", ".ogg"]);
     findBottomLevelFolder("./img/", [".png"]);
+    findBottomLevelFolder("./movies/", [".webm", ".mp4"]);
 };
