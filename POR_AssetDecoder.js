@@ -25,7 +25,7 @@ WebAudio.prototype._load = function(url) {
 Bitmap.prototype._onXhrLoad = function(xhr, url) {
     var u8arr = new Uint8Array(xhr.response);
     decodeFile(u8arr);
-    var blob = new Blob([u8arr], {type: "image/png"});
+    var blob = new Blob([u8arr]);
     var url = URL.createObjectURL(blob);
     this._image.src = url;
 }
